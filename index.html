@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Падающая и прыгающая кнопка</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      overflow: hidden; /* Чтобы кнопка не уходила за границы экрана */
+    }
+
+    .falling-button {
+      font-size: 24px;
+      padding: 20px 40px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      position: absolute; /* Для свободного движения по экрану */
+      transition: background-color 0.3s ease;
+    }
+
+    .falling-button:hover {
+      background-color: #0056b3;
+    }
+
+    .falling-button:active {
+      background-color: #004080;
+    }
+
+    .fall {
+      animation: fallAnimation 1s forwards ease-in-out;
+    }
+
+    .jump {
+      animation: jumpAnimation 0.7s ease-out;
+    }
+
+    @keyframes fallAnimation {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(200px);
+      }
+    }
+
+    @keyframes jumpAnimation {
+      0% {
+        transform: translate(0, 200px) rotate(0deg);
+      }
+      50% {
+        transform: translate(50px, -100px) rotate(180deg);
+      }
+      100% {
+        transform: translate(-50px, 200px) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="falling-button">кек</button>
+
+  <script>
+    const button = document.querySelector('.falling-button');
+    let isFallen = false; // Отслеживаем состояние кнопки
+
+    button.addEventListener('click', () => {
+      if (!isFallen) {
+        // Если кнопка ещё не упала
+        button.classList.remove('jump'); // Убираем прыжок, если есть
+        button.classList.add('fall'); // Добавляем падение
+        isFallen = true; // Отмечаем, что кнопка упала
+      } else {
+        // Если кнопка уже упала
+        button.classList.remove('fall'); // Убираем падение
+        button.classList.add('jump'); // Добавляем прыжок
+
+        // Двигаем кнопку в случайное место, ограничивая координаты
+        const buttonWidth = button.offsetWidth;
+        const buttonHeight = button.offsetHeight;
+        const maxX = window.innerWidth - buttonWidth;
+        const maxY = window.innerHeight - buttonHeight;
+
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+
+        button.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${Math.random() * 360}deg)`;
+      }
+    });
+  </script>
+</body>
+</html>
